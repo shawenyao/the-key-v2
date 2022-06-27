@@ -47,7 +47,8 @@ async def control_leds():
 
     while True:
         time.sleep(1)
-            
+        
+        # ask windows how many notifications there are currently
         listener = UserNotificationListener.get_current()
         notifications = await listener.get_notifications_async(NotificationKinds.TOAST)
 
