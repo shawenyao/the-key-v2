@@ -52,7 +52,7 @@ async def control_leds():
         listener = UserNotificationListener.get_current()
         notifications = await listener.get_notifications_async(NotificationKinds.TOAST)
 
-        # if there is any notification and the LED is not in notification mode
+        # if there is at least one notification and the LED is not in notification mode
         if len(notifications) >= 1 and notification_mode == False:
             # turn on notification mode
             notification_mode = True
