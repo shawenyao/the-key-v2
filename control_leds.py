@@ -29,7 +29,7 @@ def format_msg(msg):
 def send_msg(dev, msg):
     dev.write(b"\x00" + msg)
 
-def change_notification_mode(on):
+def toggle_notification_mode(on):
     if on:
         mode = 14
     else:
@@ -41,9 +41,9 @@ def change_notification_mode(on):
     dev.close()
 
 async def control_leds():
-    # turn off notification mode
+    # turn off notification mode upon initialization
     notification_mode = False
-    change_notification_mode(on=notification_mode)
+    toggle_notification_mode(on=notification_mode)
 
     while True:
         time.sleep(1)
@@ -55,13 +55,13 @@ async def control_leds():
         if len(notifications) >= 1 and notification_mode == False:
             # turn on notification mode
             notification_mode = True
-            change_notification_mode(on=notification_mode)
+            toggle_notification_mode(on=notification_mode)
             
         # if there isn't any notification and the LED is in notification mode
         elif len(notifications) == 0 and notification_mode == True:
             # turn off notification mode
             notification_mode = False
-            change_notification_mode(on=notification_mode)
+            toggle_notification_mode(on=notification_mode)
 
 if __name__ == '__main__':
     asyncio.run(control_leds())
