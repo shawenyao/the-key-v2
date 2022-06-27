@@ -5,7 +5,7 @@ import asyncio
 from winrt.windows.ui.notifications.management import UserNotificationListener
 from winrt.windows.ui.notifications import NotificationKinds
 
-# hid device path
+# HID device path
 # use hid.enumerate() to figure out
 PATH = b'\\\\?\\HID#VID_FEED&PID_6070&MI_01#7&36c4d81a&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}'
 
