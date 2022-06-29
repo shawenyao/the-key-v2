@@ -22,33 +22,39 @@ def change_rgb_mode(mode):
     msg = struct.pack(">BBB", CMD_VIA_LIGHTING_SET_VALUE, QMK_RGBLIGHT_EFFECT, mode)
     return(msg)
 
+def change_rgb_color(h, s):
+    msg = struct.pack(">BBBB", CMD_VIA_LIGHTING_SET_VALUE, QMK_RGBLIGHT_COLOR, h, s)
+    return(msg)
+
 def format_msg(msg):
     msg += b"\x00" * (MSG_LEN - len(msg))
     return(msg)
 
-def send_msg(dev, msg):
-    dev.write(b"\x00" + msg)
-
-def toggle_notification_mode(on):
-    if on:
-        mode = 14
-    else:
-        mode = 2
-    
+def send_msg(msg):
+    msg_long = format_msg(msg)
     dev = hid.Device(path=PATH)
-    msg = format_msg(change_rgb_mode(mode))
-    send_msg(dev, msg)
+    dev.write(b"\x00" + msg_long)
     dev.close()
 
+def change_notification_mode(on):
+    if on:
+        mode = 14 # Rainbow Swirl
+    else:
+        mode = 2 # Breathing
+    send_msg(change_rgb_mode(mode))
+
 async def control_leds():
-    # turn off notification mode upon initialization
+    # turn off notification mode
     notification_mode = False
-    toggle_notification_mode(on=notification_mode)
+    change_notification_mode(on=notification_mode)
+    # set light blue as the default color
+    send_msg(change_rgb_color(140, 255))
 
     while True:
+        # check status update every 1 second
         time.sleep(1)
         
-        # ask windows how many notifications there are currently
+        # ask Windows about the system notifications
         listener = UserNotificationListener.get_current()
         notifications = await listener.get_notifications_async(NotificationKinds.TOAST)
 
@@ -56,13 +62,12 @@ async def control_leds():
         if len(notifications) >= 1 and notification_mode == False:
             # turn on notification mode
             notification_mode = True
-            toggle_notification_mode(on=notification_mode)
-            
+            change_notification_mode(on=notification_mode)            
         # if there isn't any notification and the LED is in notification mode
         elif len(notifications) == 0 and notification_mode == True:
             # turn off notification mode
             notification_mode = False
-            toggle_notification_mode(on=notification_mode)
+            change_notification_mode(on=notification_mode)
 
 if __name__ == '__main__':
     asyncio.run(control_leds())
