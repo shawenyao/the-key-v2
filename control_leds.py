@@ -2,6 +2,7 @@ import hid
 import struct
 import time
 import asyncio
+from datetime import date
 from winrt.windows.ui.notifications.management import UserNotificationListener
 from winrt.windows.ui.notifications import NotificationKinds
 
@@ -16,6 +17,16 @@ QMK_RGBLIGHT_BRIGHTNESS = 0x80
 QMK_RGBLIGHT_EFFECT = 0x81
 QMK_RGBLIGHT_COLOR = 0x83
 MSG_LEN = 32
+# default color depending on day of the week
+COLOR_BY_DAY_OF_WEEK = {
+    0: [0, 255], # red
+    1: [30, 255], # yellow
+    2: [80, 255], # green
+    3: [140, 255], # light blue
+    4: [170, 255], # blue
+    5: [220, 255], # purple
+    6: [0, 0] # white
+}
 
 # helper functions
 def change_rgb_mode(mode):
@@ -43,12 +54,17 @@ def change_notification_mode(on):
         mode = 2 # Breathing
     send_msg(change_rgb_mode(mode))
 
+def change_color_by_day_of_week(day_of_week):
+    h = COLOR_BY_DAY_OF_WEEK[day_of_week][0]
+    s = COLOR_BY_DAY_OF_WEEK[day_of_week][1]
+    send_msg(change_rgb_color(h=h, s=s))
+
 async def control_leds():
     # turn off notification mode
     notification_mode = False
     change_notification_mode(on=notification_mode)
-    # set light blue as the default color
-    send_msg(change_rgb_color(140, 255))
+    # set default color based on day of the week (0 to 6)
+    change_color_by_day_of_week(date.today().weekday())
 
     while True:
         # check status update every 1 second
