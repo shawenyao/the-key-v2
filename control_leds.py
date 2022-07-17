@@ -24,8 +24,8 @@ COLOR_BY_DAY_OF_WEEK = {
     2: [80, 255], # green
     3: [140, 255], # light blue
     4: [170, 255], # blue
-    5: [220, 255], # purple
-    6: [0, 0] # white
+    5: [200, 255], # purple
+    6: [240, 255] # pink
 }
 
 # helper functions
