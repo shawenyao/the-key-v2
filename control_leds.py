@@ -49,9 +49,9 @@ def send_msg(msg):
 
 def change_notification_mode(on):
     if on:
-        mode = 14 # rainbow swirl
+        mode = 14 # "Rainbow Swirl 6"
     else:
-        mode = 2 # breathing
+        mode = 2 # "Breathing 1"
     send_msg(change_rgb_mode(mode))
 
 def change_color_by_day_of_week(day_of_week):
