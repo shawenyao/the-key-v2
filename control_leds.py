@@ -26,6 +26,10 @@ def change_rgb_color(h, s):
     msg = struct.pack(">BBBB", CMD_VIA_LIGHTING_SET_VALUE, QMK_RGBLIGHT_COLOR, h, s)
     return(msg)
 
+def change_rgb_brightness(v):
+    msg = struct.pack(">BBB", CMD_VIA_LIGHTING_SET_VALUE, QMK_RGBLIGHT_BRIGHTNESS, v)
+    return(msg)
+
 def format_msg(msg):
     msg += b"\x00" * (MSG_LEN - len(msg))
     return(msg)
