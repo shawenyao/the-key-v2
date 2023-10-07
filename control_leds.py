@@ -3,12 +3,12 @@ import struct
 import time
 import asyncio
 from datetime import date
-from winrt.windows.ui.notifications.management import UserNotificationListener
-from winrt.windows.ui.notifications import NotificationKinds
+from winsdk.windows.ui.notifications.management import UserNotificationListener
+from winsdk.windows.ui.notifications import NotificationKinds
 
 # HID device path
 # use hid.enumerate() to figure out
-PATH = b'\\\\?\\HID#VID_FEED&PID_6070&MI_01#7&36c4d81a&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}'
+PATH = b'\\\\?\\HID#VID_FEED&PID_6070&MI_01#8&25d4847a&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}'
 
 # constants
 CMD_VIA_LIGHTING_SET_VALUE = 0x07
@@ -35,10 +35,6 @@ def change_rgb_mode(mode):
 
 def change_rgb_color(h, s):
     msg = struct.pack(">BBBB", CMD_VIA_LIGHTING_SET_VALUE, QMK_RGBLIGHT_COLOR, h, s)
-    return(msg)
-
-def change_rgb_brightness(v):
-    msg = struct.pack(">BBB", CMD_VIA_LIGHTING_SET_VALUE, QMK_RGBLIGHT_BRIGHTNESS, v)
     return(msg)
 
 def format_msg(msg):
@@ -75,7 +71,7 @@ async def control_leds():
         time.sleep(1)
         
         # ask Windows about the system notifications
-        listener = UserNotificationListener.get_current()
+        listener = UserNotificationListener.current
         notifications = await listener.get_notifications_async(NotificationKinds.TOAST)
 
         # if there is at least one notification and the LED is not in notification mode
