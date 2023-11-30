@@ -2,7 +2,7 @@ import hid
 import struct
 import time
 import asyncio
-from datetime import date
+from datetime import date, datetime
 from winsdk.windows.ui.notifications.management import UserNotificationListener
 from winsdk.windows.ui.notifications import NotificationKinds
 
@@ -42,10 +42,13 @@ def format_msg(msg):
     return(msg)
 
 def send_msg(msg):
-    msg_long = format_msg(msg)
-    dev = hid.Device(path=PATH)
-    dev.write(b"\x00" + msg_long)
-    dev.close()
+    try:
+        msg_long = format_msg(msg)
+        dev = hid.Device(path=PATH)
+        dev.write(b"\x00" + msg_long)
+        dev.close()
+    except Exception:
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} keyboard not connected")
 
 def change_notification_mode(on):
     if on:
