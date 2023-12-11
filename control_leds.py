@@ -8,7 +8,7 @@ from winsdk.windows.ui.notifications import NotificationKinds
 
 # HID device path
 # use hid.enumerate() to figure out
-PATH = b'\\\\?\\HID#VID_FEED&PID_6070&MI_01#8&25d4847a&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}'
+PATH = b'\\\\?\\HID#VID_FEED&PID_6070&MI_01#9&65c8ae4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}'
 
 # constants
 CMD_VIA_LIGHTING_SET_VALUE = 0x07
@@ -80,13 +80,11 @@ async def control_leds():
         # if there is at least one notification and the LED is not in notification mode
         if len(notifications) >= 1 and notification_mode == False:
             # turn on notification mode
-            notification_mode = True
-            change_notification_mode(on=notification_mode)            
+            change_notification_mode(on=True)            
         # if there isn't any notification and the LED is in notification mode
         elif len(notifications) == 0 and notification_mode == True:
             # turn off notification mode
-            notification_mode = False
-            change_notification_mode(on=notification_mode)
+            change_notification_mode(on=False)
 
 if __name__ == '__main__':
     asyncio.run(control_leds())
