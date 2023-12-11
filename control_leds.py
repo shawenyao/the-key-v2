@@ -80,10 +80,12 @@ async def control_leds():
         # if there is at least one notification and the LED is not in notification mode
         if len(notifications) >= 1 and notification_mode == False:
             # turn on notification mode
-            change_notification_mode(on=True)            
+            notification_mode = True
+            change_notification_mode(on=notification_mode)            
         # if there isn't any notification and the LED is in notification mode
         elif len(notifications) == 0 and notification_mode == True:
             # turn off notification mode
+            notification_mode = False
             change_notification_mode(on=False)
 
 if __name__ == '__main__':
