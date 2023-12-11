@@ -66,8 +66,10 @@ async def control_leds():
     # turn off notification mode
     notification_mode = False
     change_notification_mode(on=notification_mode)
+
     # set default color based on day of the week (0 to 6)
-    change_color_by_day_of_week(date.today().weekday())
+    weekday = date.today().weekday()
+    change_color_by_day_of_week(weekday)
 
     while True:
         # check status update every 1 second
@@ -77,16 +79,22 @@ async def control_leds():
         listener = UserNotificationListener.current
         notifications = await listener.get_notifications_async(NotificationKinds.TOAST)
 
-        # if there is at least one notification and the LED is not in notification mode
         if len(notifications) >= 1 and notification_mode == False:
+            # if there is at least one notification and the LED is not in notification mode
             # turn on notification mode
             notification_mode = True
-            change_notification_mode(on=notification_mode)            
-        # if there isn't any notification and the LED is in notification mode
+            change_notification_mode(on=notification_mode)
         elif len(notifications) == 0 and notification_mode == True:
+            # if there isn't any notification and the LED is in notification mode
             # turn off notification mode
             notification_mode = False
             change_notification_mode(on=False)
+
+            # change default color if it's a new weekday
+            new_weekday = date.today().weekday()
+            if weekday != new_weekday:
+                weekday = new_weekday
+                change_color_by_day_of_week(weekday)
 
 if __name__ == '__main__':
     asyncio.run(control_leds())
