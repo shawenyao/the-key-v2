@@ -88,7 +88,7 @@ async def control_leds():
             # if there isn't any notification and the LED is in notification mode
             # turn off notification mode
             notification_mode = False
-            change_notification_mode(on=False)
+            change_notification_mode(on=notification_mode)
 
             # change default color if it's a new weekday
             new_weekday = date.today().weekday()
