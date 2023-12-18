@@ -75,6 +75,9 @@ async def control_leds():
         # check status update every 1 second
         time.sleep(1)
         
+        # get the current weekday
+        new_weekday = date.today().weekday()
+
         # ask Windows about the system notifications
         listener = UserNotificationListener.current
         notifications = await listener.get_notifications_async(NotificationKinds.TOAST)
@@ -91,7 +94,6 @@ async def control_leds():
             change_notification_mode(on=notification_mode)
 
             # change default color if it's a new weekday
-            new_weekday = date.today().weekday()
             if weekday != new_weekday:
                 weekday = new_weekday
                 change_color_by_day_of_week(weekday)
