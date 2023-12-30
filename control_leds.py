@@ -79,7 +79,7 @@ async def control_leds():
         new_weekday = date.today().weekday()
 
          # change default color if it's a new weekday
-        if weekday != new_weekday:
+        if weekday != new_weekday and notification_mode == False:
             weekday = new_weekday
             change_color_by_day_of_week(weekday)
 
